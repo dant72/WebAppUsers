@@ -21,13 +21,9 @@ app.MapControllerRoute(
 app.UseCors(policy =>
 {
     policy
+        .AllowAnyOrigin()
         .AllowAnyMethod()
-        .AllowAnyHeader()
-        .SetIsOriginAllowed(origin =>
-            origin is "https://localhost:7219"
-                or "https://mysite.ru"
-        )
-        .AllowCredentials();
+        .AllowAnyHeader();
 });
 
 app.Run();
