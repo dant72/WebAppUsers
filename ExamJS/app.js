@@ -1,46 +1,84 @@
-var table = $('#table');
+const table = $('#table');
+const editor = $('#editor');
+const url = "http://localhost:5219";
 
 $(document).ready(function() 
 {
     $('.ap1').click(function()
     { 
-        $.getJSON("http://localhost:5219/User/GetAll")
-        .done(function(data)
-        {
-            alert(JSON.stringify(data));
-            FillTable(data);
-            console.log(data);
-        })
-        .fail(function()
-        {
-            console.log( "error" );
-        })
-        .always(function()
-        {
-            console.log( "complete" );
-        });
+
     });
 });
 
-
-
-function FillTable(data)
+UpdateTable();
+function UpdateTable()
 {
-  let json = data;
-	table.html('');
+  $.getJSON(`${url}/User/GetAll`)
+  .done(function(data)
+  {
+    //alert(JSON.stringify(data));
+    ShowTable(data);
+    ShowEditorTable(data);
+    console.dir(data);
+  })
+  .fail(function()
+  {
+    console.log( "error" );
+  })
+  .always(function()
+  {
+    console.log( "complete" );
+  });
+}
 
-	for (let i = 0; i < json.length; i++)
+function ShowTable(data)
+{
+	table.html('');
+  let row = Object.keys(data[0]);
+
+  for (let j = 0; j < row.length; j++) 
+  {
+    console.dir(row[j]);
+
+    $('<th>')
+    .html(`${row[j]}`)
+    .appendTo(table);
+  }
+
+	for (let i = 0; i < data.length; i++)
 	{
 		let tr = $('<tr>');
-    console.dir(json[i]);
-	
-    let v = Object.values(json[i]);
-		for (let j = 0; j < v.length; j++) 
+    let row = Object.values(data[i]);
+
+		for (let j = 0; j < row.length; j++) 
 		{
-			$('<td>').html(`${[j].value}`)
+      console.dir(row[j]);
+
+			$('<td>')
+      .html(`${row[j]}`)
 			.appendTo(tr);
     }
-    
     table.append(tr);
   }
+}
+
+function ShowEditorTable(data)
+{
+	editor.html('');
+
+  let row = Object.keys(data[0]);
+  for (let j = 0; j < row.length; j++) 
+  {
+    let tr = $('<tr>');
+    console.dir(row[j]);
+    $('<td>')
+    .html(`${row[j]}`)
+    .appendTo(tr);
+
+    $('<td>')
+    .html(`<input id="${row[j]}"></input>`)
+    .appendTo(tr);
+    
+    editor.append(tr);
+  }  
 }
