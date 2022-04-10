@@ -16,9 +16,15 @@ public class UserController : ControllerBase
     {
         return _userRepository.GetAll();
     }
-    [HttpPost]
+    [HttpPut]
     public Task Add([FromForm]User user)
     {
         return _userRepository.Add(user);
+    }
+    
+    [HttpPatch]
+    public Task Update([FromForm]User user)
+    {
+        return _userRepository.Update(user);
     }
 }

@@ -18,19 +18,31 @@ $('#ok').click(function()
   {
     info[`${exampleObj[j]}`] = $(`#${exampleObj[j]}`).prop("value");
   }
+
+  let ID = $(`#${exampleObj[0]}`).prop("value"), TYPE, URL;
+
+  if (ID == '')
+  {
+    TYPE = "PUT";
+    URL = `${url}/User/Add`;
+  }
+  else
+  {
+    TYPE = "PATCH";
+    URL = `${url}/User/Update`;
+  }
   console.dir(info);
   $.ajax({
-    type: "POST",
-    url: `${url}/User/Add`,
+    type: TYPE,
+    url: URL,
     dataType: 'json',
     data: info,
     success: function(data) {
        console.log(data);
     }
+  });
 });
 
-
-});
 
 UpdateTable();
 function UpdateTable()
@@ -80,11 +92,17 @@ function ShowTable(data)
 
     }
     let td = $('<td>').attr("class", "editORdel");
-      $('<button>EDIT</button>').attr("class", "edit").appendTo(td);
+      $('<button>EDIT</button>')
+      .attr("class", "edit")
+      .click(Edit)
+      .prop("obj", data[i])
+      .appendTo(td);
       tr.append(td);
 
       td = $('<td>').attr("class", "editORdel");
-      $('<button>DELETE</button>').attr("class", "del").appendTo(td);
+      $('<button>DELETE</button>')
+      .attr("class", "del")
+      .appendTo(td);
       tr.append(td);
 
     table.append(tr);
@@ -116,4 +134,16 @@ function ShowEditorTable(data)
     
     editor.append(tr);
   }  
+}
+
+function Edit()
+{
+  console.dir(this.obj);
+  //alert(this.obj);
+  let keys = Object.keys(this.obj);
+  let values = Object.values(this.obj);
+  for (let j = 0; j < keys.length; j++) 
+  {
+    $(`#${keys[j]}`).prop("value", `${values[j]}`);
+  }
 }
