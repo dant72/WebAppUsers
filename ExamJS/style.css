@@ -26,3 +26,13 @@ fieldset
 	border: 2px solid #ddd;
 	margin: 5px 0;
 }
+
+#id
+{
+	enable-background: accumulate;
+}
+
+.editORdel
+{
+	width: 80px;
+}

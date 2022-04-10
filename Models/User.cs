@@ -17,4 +17,6 @@ public class User : IEntity
         SecondName = secondName;
     }
     
+    public User(){}
+    
 }

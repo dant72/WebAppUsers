@@ -1,6 +1,7 @@
 const table = $('#table');
 const editor = $('#editor');
 const url = "http://localhost:5219";
+var exampleObj;
 
 $(document).ready(function() 
 {
@@ -10,16 +11,35 @@ $(document).ready(function()
     });
 });
 
+$('#ok').click(function()
+{ 
+  let info = new Object();
+  for (let j = 0; j < exampleObj.length; j++) 
+  {
+    info[`${exampleObj[j]}`] = $(`#${exampleObj[j]}`).prop("value");
+  }
+  console.dir(info);
+  $.ajax({
+    type: "POST",
+    url: `${url}/User/Add`,
+    dataType: 'json',
+    data: info,
+    success: function(data) {
+       console.log(data);
+    }
+});
+
+
+});
+
 UpdateTable();
 function UpdateTable()
 {
   $.getJSON(`${url}/User/GetAll`)
   .done(function(data)
   {
-    //alert(JSON.stringify(data));
     ShowTable(data);
     ShowEditorTable(data);
-    console.dir(data);
   })
   .fail(function()
   {
@@ -35,11 +55,10 @@ function ShowTable(data)
 {
 	table.html('');
   let row = Object.keys(data[0]);
+  exampleObj = row;
 
   for (let j = 0; j < row.length; j++) 
   {
-    console.dir(row[j]);
-
     $('<th>')
     .html(`${row[j]}`)
     .appendTo(table);
@@ -49,6 +68,7 @@ function ShowTable(data)
 	{
 		let tr = $('<tr>');
     let row = Object.values(data[i]);
+    tr.obj = row; 
 
 		for (let j = 0; j < row.length; j++) 
 		{
@@ -57,7 +77,16 @@ function ShowTable(data)
 			$('<td>')
       .html(`${row[j]}`)
 			.appendTo(tr);
+
     }
+    let td = $('<td>').attr("class", "editORdel");
+      $('<button>EDIT</button>').attr("class", "edit").appendTo(td);
+      tr.append(td);
+
+      td = $('<td>').attr("class", "editORdel");
+      $('<button>DELETE</button>').attr("class", "del").appendTo(td);
+      tr.append(td);
+
     table.append(tr);
   }
 }
@@ -70,13 +99,19 @@ function ShowEditorTable(data)
   for (let j = 0; j < row.length; j++) 
   {
     let tr = $('<tr>');
-    console.dir(row[j]);
+
     $('<td>')
     .html(`${row[j]}`)
     .appendTo(tr);
 
+    let input = $('<input></input>');
+    if (row[j] === 'id')
+      input.attr('disabled', true);
+    input.attr('id', `${row[j]}`);
+
     $('<td>')
-    .html(`<input id="${row[j]}"></input>`)
+    .append(input)
+    //.html(`<input id="${row[j]}"></input>`)
     .appendTo(tr);
     
     editor.append(tr);
