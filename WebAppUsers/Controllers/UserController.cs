@@ -27,4 +27,10 @@ public class UserController : ControllerBase
     {
         return _userRepository.Update(user);
     }
+    
+    [HttpDelete]
+    public Task Remove([FromForm]User user)
+    {
+        return _userRepository.Remove(user);
+    }
 }

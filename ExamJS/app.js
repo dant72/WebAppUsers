@@ -40,7 +40,8 @@ $('#ok').click(function()
     success: function(data) {
        console.log(data);
     }
-  });
+  }).then(UpdateTable());
+
 });
 
 
@@ -102,6 +103,8 @@ function ShowTable(data)
       td = $('<td>').attr("class", "editORdel");
       $('<button>DELETE</button>')
       .attr("class", "del")
+      .prop("obj", data[i])
+      .click(Delete)
       .appendTo(td);
       tr.append(td);
 
@@ -146,4 +149,18 @@ function Edit()
   {
     $(`#${keys[j]}`).prop("value", `${values[j]}`);
   }
+}
+
+function Delete()
+{
+  console.dir(this.obj);
+  $.ajax({
+    type: "DELETE",
+    url: `${url}/User/Remove`,
+    dataType: 'json',
+    data: this.obj,
+    success: function(data) {
+       console.log(data);
+    }
+  }).then(UpdateTable());
 }
