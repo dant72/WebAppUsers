@@ -25,14 +25,15 @@ fieldset
 	border-radius: 5px;
 	border: 2px solid #ddd;
 	margin: 5px 0;
-}
-
-#id
-{
-	enable-background: accumulate;
+	max-width: 300px;
 }
 
 .editORdel
 {
 	width: 80px;
+}
+
+#add
+{
+	margin: 5px 0;
 }

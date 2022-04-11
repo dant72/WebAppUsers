@@ -1,14 +1,29 @@
 const table = $('#table');
 const editor = $('#editor');
 const url = "http://localhost:5219";
+const fieldset = $('#fieldset');
+const add = $('#add');
 var exampleObj;
+fieldset.hide();
 
-$(document).ready(function() 
-{
-    $('.ap1').click(function()
-    { 
+$('#add').click(function()
+{ 
+  fieldset.show();
+  add.hide();
+  for (let j = 0; j < exampleObj.length; j++) 
+  {
+    $(`#${exampleObj[j]}`).prop("value", "");
+  }
+});
 
-    });
+$('#cancel').click(function()
+{ 
+  fieldset.hide();
+  add.show();
+  for (let j = 0; j < exampleObj.length; j++) 
+  {
+    $(`#${exampleObj[j]}`).prop("value", "");
+  }
 });
 
 $('#ok').click(function()
@@ -35,13 +50,18 @@ $('#ok').click(function()
   $.ajax({
     type: TYPE,
     url: URL,
-    dataType: 'json',
-    data: info,
-    success: function(data) {
-       console.log(data);
-    }
-  }).then(UpdateTable());
-
+    data: info
+  }).done( function( msg ) {
+      alert("Data added / update " + msg);
+      UpdateTable();
+      fieldset.hide();
+      add.show();
+    })
+    .fail(function(msg)
+    {
+      console.log(msg);
+      alert("Error " + msg.status + " " + msg.statusText);
+    });
 });
 
 
@@ -149,6 +169,9 @@ function Edit()
   {
     $(`#${keys[j]}`).prop("value", `${values[j]}`);
   }
+
+  fieldset.show();
+  add.hide();
 }
 
 function Delete()
@@ -157,10 +180,15 @@ function Delete()
   $.ajax({
     type: "DELETE",
     url: `${url}/User/Remove`,
-    dataType: 'json',
-    data: this.obj,
-    success: function(data) {
-       console.log(data);
-    }
-  }).then(UpdateTable());
+    data: this.obj
+  }).done( function( msg ) {
+    alert("Data deleted " + msg);
+    UpdateTable();
+    fieldset.hide();
+  })
+  .fail(function(msg)
+  {
+    console.log(msg);
+    alert("Error " + msg.status + " " + msg.statusText);
+  });
 }
