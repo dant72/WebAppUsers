@@ -26,7 +26,7 @@ $('#cancel').click(function()
   }
 });
 
-$('#ok').click(function()
+function SEND()
 { 
   let info = new Object();
   for (let j = 0; j < exampleObj.length; j++) 
@@ -62,7 +62,7 @@ $('#ok').click(function()
       console.log(msg);
       alert("Error " + msg.status + " " + msg.statusText);
     });
-});
+}
 
 
 UpdateTable();
@@ -142,13 +142,21 @@ function ShowEditorTable(data)
     let tr = $('<tr>');
 
     $('<td>')
-    .html(`${row[j]}`)
+    .append(`${row[j]}`)
     .appendTo(tr);
 
-    let input = $('<input></input>');
+    let input = $('<input />');
     if (row[j] === 'id')
+    {
       input.attr('disabled', true);
+    }
+    else
+    {
+      input.attr('required', true);
+    }
+
     input.attr('id', `${row[j]}`);
+    input.attr('type', 'text');
 
     $('<td>')
     .append(input)
